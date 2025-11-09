@@ -14,7 +14,6 @@ public class Main {
     private static String gemini;
 
     static void main() {
-
         try {
             SchedulerFactory stdSchedulerFactory = new StdSchedulerFactory();
             Scheduler scheduler = stdSchedulerFactory.getScheduler();
