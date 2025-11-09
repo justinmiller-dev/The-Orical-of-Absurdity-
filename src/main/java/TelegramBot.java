@@ -1,14 +1,8 @@
 import org.telegram.telegrambots.client.okhttp.OkHttpTelegramClient;
 import org.telegram.telegrambots.longpolling.util.LongPollingSingleThreadUpdateConsumer;
-import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
-import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.methods.send.SendChatAction;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
-import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
 
@@ -28,88 +22,20 @@ public class TelegramBot implements LongPollingSingleThreadUpdateConsumer {
         .chatId(chatId)
         .text(messageText)
         .build();
+        message.enableMarkdown(true);
+        message.setParseMode("HTML");
         try {
             telegramClient.execute(message);
         } catch (TelegramApiException e) {
-            System.out.println("Message failed to send");
+            System.out.println("Message failed to send with formatting retrying without");
             System.err.println(e.getMessage());
-        }
-    }
-    public void sendMessage(long chatId, ReplyKeyboard replyKeyboard, String messageText) {
-        SendMessage message = SendMessage
-                .builder()
-                .chatId(chatId)
-                .text(messageText)
-                .build();
-        try {
-            message.setReplyMarkup(replyKeyboard);
-            telegramClient.execute(message);
-        } catch (TelegramApiException e) {
-            System.out.println("Message with keyboard failed to send");
-            System.err.println(e.getMessage());
-        }
-    }
-    public int sendMessageAndGetMessageID(long chatId, ReplyKeyboard replyKeyboard, String messageText) {
-        int messageId = 0;
-        SendMessage message = SendMessage
-                .builder()
-                .chatId(chatId)
-                .text(messageText)
-                .build();
-        try {
-            message.setReplyMarkup(replyKeyboard);
-            messageId = telegramClient.execute(message).getMessageId();
-        } catch (TelegramApiException e) {
-            System.out.println("sendMessageAndGetMessageID with keyboard failed to send");
-            System.err.println(e.getMessage());
-        }
-        return messageId;
-    }
-    public int sendMessageAndGetMessageID(long chatId,String messageText ) {
-        int messageId = 0;
-        SendMessage message = SendMessage
-                .builder()
-                .chatId(chatId)
-                .text(messageText)
-                .build();
-        try {
-            messageId = telegramClient.execute(message).getMessageId();
-        } catch (TelegramApiException e) {
-            System.out.println("sendMessageAndGetMessageID failed to send");
-            System.err.println(e.getMessage());
-        }
-        return messageId;
-    }
-
-    public void sendCallBackMessage(AnswerCallbackQuery callBack){
-        try {
-            telegramClient.execute(callBack);
-        } catch (TelegramApiException e){
-            System.out.println("Message callback failed to send");
-            System.err.println(e.getMessage());
-        }
-    }
-    public void deleteMessage(String chatId, int messageId){
-        DeleteMessage deleteMessage = new DeleteMessage(chatId,messageId);
-        try {
-            telegramClient.execute(deleteMessage);
-        } catch (TelegramApiException e){
-            System.out.println("deleteMessage failed");
-            System.err.println(e.getMessage());
-        }
-    }
-    public void editMessage(long chatId, int messageId, InlineKeyboardMarkup keyboard, String message){
-        System.out.println(message);
-        EditMessageText editMessageText = new EditMessageText("");
-        editMessageText.setChatId(chatId);
-        editMessageText.setMessageId(messageId);
-        editMessageText.setText(message);
-        editMessageText.setReplyMarkup(keyboard);
-        try{
-            telegramClient.execute(editMessageText);
-        } catch (TelegramApiException e){
-            System.out.println("editMessage failed");
-            System.err.println(e.getMessage());
+            try{
+                message.enableMarkdown(false);
+                telegramClient.execute(message);
+            } catch (TelegramApiException f){
+                System.err.println("Message Failed");
+                System.err.println(f.getMessage());
+            }
         }
     }
     public void sendChatAction(long chatId){
