@@ -1,6 +1,8 @@
+package org.justindev;
+
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-public class MessageHandler extends CommandHandler{
+public class MessageHandler extends CommandHandler {
 
     public void messageParse(Update update){
        if (update.hasCallbackQuery()) {

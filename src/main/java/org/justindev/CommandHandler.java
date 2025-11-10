@@ -1,3 +1,5 @@
+package org.justindev;
+
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 public class CommandHandler extends TelegramBot {

@@ -1,3 +1,6 @@
+package org.justindev;
+
+
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 import org.telegram.telegrambots.longpolling.TelegramBotsLongPollingApplication;

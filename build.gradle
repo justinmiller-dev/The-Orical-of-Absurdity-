@@ -1,0 +1,36 @@
+plugins {
+    id 'java'
+}
+
+group = 'org.justindev'
+version = '1.0'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    implementation ("org.telegram:telegrambots-longpolling:9.2.0")
+    implementation("org.telegram:telegrambots-client:9.2.0")
+    // https://mvnrepository.com/artifact/com.google.genai/google-genai
+    implementation("com.google.genai:google-genai:1.26.0")
+    // https://mvnrepository.com/artifact/org.quartz-scheduler/quartz
+    implementation("org.quartz-scheduler:quartz:2.5.1")
+}
+
+jar {
+    manifest {
+        attributes('Main-Class': 'org.justindev.Main')
+    }
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
+}
+
+test {
+    useJUnitPlatform()
+}
