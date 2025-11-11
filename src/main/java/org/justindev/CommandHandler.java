@@ -4,11 +4,6 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 public class CommandHandler extends TelegramBot {
 
-    static int requests = 0;
-    static int totalRequestsToday = 0;
-    static int minuteRequestLimit = 9;
-    static int dailyRequestLimit = 250;
-
     public void commandParse(Update update) {
 
         long chatId;
@@ -29,17 +24,15 @@ public class CommandHandler extends TelegramBot {
             }
             if (message.startsWith("/question")){
                 String regex = "(?i)/question\\S*";
-                String output = message.replaceAll(regex,"");
-                if (output.isEmpty()){
+                String input = message.replaceAll(regex,"");
+                System.out.println(input);
+                if (input.isEmpty()){
                     sendMessage("Beg pardon, but was that a question or merely a ghost of one? It seems to have arrived dressed in silence!",chatId);
-                } else if (requests <= minuteRequestLimit && totalRequestsToday <= dailyRequestLimit) {
+                } else  {
                     sendChatAction(chatId);
-                    String response = GeminiHandler.generateResponse(output);
+                    String response = GeminiHandler.generateResponse(input);
                     sendMessage(response,chatId);
-                    requests++;
-                    totalRequestsToday++;
-                } else {
-                    sendMessage("Hold that thought. I must consult the stars and gather my scattered musings. Do ask again in a tickle of time!",chatId);
+                    System.out.println(response);
                 }
             }
             if (message.startsWith("/about")){
@@ -57,12 +50,6 @@ public class CommandHandler extends TelegramBot {
                 sendMessage("Simply type /question and then your question to ask me anything",chatId);
             }
         }
-    }
-    public static void resetDailyRequestLimit(){
-        totalRequestsToday = 0;
-    }
-    public static void resetMinuteRequestLimit (){
-        requests = 0;
     }
 }
 

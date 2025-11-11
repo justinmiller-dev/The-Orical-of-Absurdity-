@@ -25,7 +25,7 @@ public class TelegramBot implements LongPollingSingleThreadUpdateConsumer {
         .text(messageText)
         .build();
         message.enableMarkdown(true);
-        message.setParseMode("HTML");
+        message.setParseMode("Markdown");
         try {
             telegramClient.execute(message);
         } catch (TelegramApiException e) {
