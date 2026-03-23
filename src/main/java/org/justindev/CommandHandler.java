@@ -2,12 +2,14 @@ package org.justindev;
 
 import org.telegram.telegrambots.meta.api.objects.Update;
 
+import java.util.concurrent.CompletableFuture;
+
 public class CommandHandler extends TelegramBot {
 
     public void commandParse(Update update) {
 
         long chatId;
-        String message;
+        String message = "";
 
         if (update.getMessage() != null){
             chatId = update.getMessage().getChatId();
@@ -30,7 +32,15 @@ public class CommandHandler extends TelegramBot {
                     sendMessage("Beg pardon, but was that a question or merely a ghost of one? It seems to have arrived dressed in silence!",chatId);
                 } else  {
                     sendChatAction(chatId);
-                    String response = GeminiHandler.generateResponse(input);
+                    CompletableFuture<String> future = CompletableFuture.supplyAsync(() -> {
+                        try {
+                            return Responder.sendRequest(input);
+                        } catch (Exception e) {
+                            System.out.println(e.getMessage());
+                            return  null;
+                        }
+                    });
+                    String response = future.join();
                     sendMessage(response,chatId);
                     System.out.println(response);
                 }

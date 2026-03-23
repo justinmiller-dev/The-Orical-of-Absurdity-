@@ -3,7 +3,7 @@ plugins {
 }
 
 group = 'org.justindev'
-version = '1.0'
+version = '1.1'
 
 repositories {
     mavenCentral()
@@ -19,6 +19,7 @@ dependencies {
     implementation("com.google.genai:google-genai:1.26.0")
     // https://mvnrepository.com/artifact/org.quartz-scheduler/quartz
     implementation("org.quartz-scheduler:quartz:2.5.1")
+    implementation("io.github.ollama4j:ollama4j:1.1.6")
 }
 
 jar {

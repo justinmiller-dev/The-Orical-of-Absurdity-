@@ -42,7 +42,6 @@ public class TelegramBot implements LongPollingSingleThreadUpdateConsumer {
     }
     public void sendChatAction(long chatId){
         String stringChatId = String.valueOf(chatId);
-
         SendChatAction chatAction = new SendChatAction(stringChatId,"typing");
         try{
             telegramClient.execute(chatAction);

@@ -19,8 +19,8 @@ public class Main {
         try{
              input = Main.class.getResourceAsStream("/.properties");
              prop.load(input);
-             botToken = prop.getProperty("api.token");
-             gemini = prop.getProperty("gem.apitoken");
+             botToken = prop.getProperty("devapi.token");
+             //gemini = prop.getProperty("gem.apitoken");
         } catch (IOException e) {
             System.err.println("Error reading resource: " + e.getMessage());
         }
