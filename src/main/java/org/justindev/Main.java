@@ -11,7 +11,6 @@ import java.util.Properties;
 public class Main {
 
     private static String botToken;
-    private static String gemini;
 
     static void main() {
         Properties prop = new Properties();
@@ -20,7 +19,6 @@ public class Main {
              input = Main.class.getResourceAsStream("/.properties");
              prop.load(input);
              botToken = prop.getProperty("devapi.token");
-             //gemini = prop.getProperty("gem.apitoken");
         } catch (IOException e) {
             System.err.println("Error reading resource: " + e.getMessage());
         }
@@ -34,8 +32,5 @@ public class Main {
     }
     public static String getBotToken() {
         return botToken;
-    }
-    public static String getGemini(){
-        return gemini;
     }
 }

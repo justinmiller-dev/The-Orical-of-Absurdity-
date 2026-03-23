@@ -32,12 +32,13 @@ public class CommandHandler extends TelegramBot {
                     sendMessage("Beg pardon, but was that a question or merely a ghost of one? It seems to have arrived dressed in silence!",chatId);
                 } else  {
                     sendChatAction(chatId);
+                    System.out.println(input);
                     CompletableFuture<String> future = CompletableFuture.supplyAsync(() -> {
                         try {
-                            return Responder.sendRequest(input);
+                            return Responder.sendRequestHTML(input);
                         } catch (Exception e) {
                             System.out.println(e.getMessage());
-                            return  null;
+                            return  "null";
                         }
                     });
                     String response = future.join();
