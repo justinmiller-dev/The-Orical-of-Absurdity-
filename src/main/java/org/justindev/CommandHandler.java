@@ -32,6 +32,9 @@ public class CommandHandler extends TelegramBot {
                 if (message.startsWith("/about@" + botUsername)){
                     sendAboutMessage(chatId);
                 }
+                if (message.startsWith("/help@" + botUsername)){
+                    sendMessage("Simply type @" + botUsername + " /question <question> to ask me anything",chatId);
+                }
             }
             else if (message.startsWith("/start")) {
                 sendWelcomeMessage(chatId);
@@ -43,7 +46,7 @@ public class CommandHandler extends TelegramBot {
                 sendAboutMessage(chatId);
             }
             if (message.startsWith("/help")) {
-                sendMessage("Simply type /question and then your question to ask me anything",chatId);
+                sendMessage("Simply type /question <question> to ask me anything",chatId);
             }
         }
     }
