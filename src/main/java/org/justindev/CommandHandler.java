@@ -86,8 +86,8 @@ public class CommandHandler extends TelegramBot {
                         Created by: Justin Miller
                         GitHub: justinmiller-dev
                         Created with
-                        Google Gen AI Java SDK
-                        https://github.com/googleapis/java-genai?tab=readme-ov-file
+                        Ollama
+                        https://ollama.com
                         Telegram Bot Java Library
                         https://github.com/rubenlagus/TelegramBots""",chatId);
     }

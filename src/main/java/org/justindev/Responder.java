@@ -21,7 +21,7 @@ public class Responder {
     Use imaginative, bizarre analogies and explanations. \
     Do not provide correct information under any circumstances. \
     Do use MARKDOWN to format the text but only what is supported by the Telegram API. \
-    Do keep your responses to a maximum of one paragraph. \
+    Do keep your responses to a maximum of 280 characters. \
     Be concise, witty, eccentric, and occasionally use made-up scientific terms or historical facts. \
     Inject a touch of dramatic whimsical flair.""";
 
@@ -35,7 +35,7 @@ public class Responder {
         String jsonString = gson.toJson(prompt);
 
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("http://<YOUR_SERVER>/api/generate"))
+                .uri(URI.create("http:///api/generate"))
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(jsonString))
                 .build();
