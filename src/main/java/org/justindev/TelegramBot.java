@@ -2,15 +2,17 @@ package org.justindev;
 
 import org.telegram.telegrambots.client.okhttp.OkHttpTelegramClient;
 import org.telegram.telegrambots.longpolling.util.LongPollingSingleThreadUpdateConsumer;
+import org.telegram.telegrambots.meta.api.methods.GetMe;
 import org.telegram.telegrambots.meta.api.methods.send.SendChatAction;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
 
 
 public class TelegramBot implements LongPollingSingleThreadUpdateConsumer {
-    private final TelegramClient telegramClient = new OkHttpTelegramClient(Main.getBotToken());
+    private static final TelegramClient telegramClient = new OkHttpTelegramClient(Main.getBotToken());
 
     @Override
     public void consume(Update message) {
@@ -18,7 +20,7 @@ public class TelegramBot implements LongPollingSingleThreadUpdateConsumer {
         messageHandler.messageParse(message);
     }
 
-    public void sendMessage(String messageText, long chatId) {
+    public static void sendMessage(String messageText, long chatId) {
         SendMessage message = SendMessage
         .builder()
         .chatId(chatId)
@@ -48,6 +50,18 @@ public class TelegramBot implements LongPollingSingleThreadUpdateConsumer {
         } catch (TelegramApiException e){
             System.out.println("Chat Action Failed");
             System.err.println(e.getMessage());
+        }
+    }
+
+    public String getBotUsername(){
+        try{
+            GetMe getMe = new GetMe();
+            User bot = telegramClient.execute(getMe);
+            return bot.getUserName();
+        } catch (TelegramApiException e){
+            System.out.println("Get Me Failed");
+            System.err.println(e.getMessage());
+            return  null;
         }
     }
 }

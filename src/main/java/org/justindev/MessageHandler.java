@@ -8,9 +8,7 @@ public class MessageHandler extends CommandHandler {
        if (update.hasCallbackQuery()) {
           commandParse(update);
        } else if (update.getMessage() != null){
-           if (update.getMessage().getText().startsWith("/")){
-               commandParse(update);
-           }
+           commandParse(update);
        }
     }
 }
