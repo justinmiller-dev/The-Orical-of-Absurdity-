@@ -21,27 +21,33 @@ public class TelegramBot implements LongPollingSingleThreadUpdateConsumer {
     }
 
     public static void sendMessage(String messageText, long chatId) {
-        SendMessage message = SendMessage
-        .builder()
-        .chatId(chatId)
-        .text(messageText)
-        .build();
-        message.enableMarkdown(true);
-        message.setParseMode("Markdown");
-        try {
-            telegramClient.execute(message);
-        } catch (TelegramApiException e) {
-            System.out.println("Message failed to send with formatting retrying without");
-            System.err.println(e.getMessage());
-            try{
-                message.enableMarkdown(false);
-                telegramClient.execute(message);
-            } catch (TelegramApiException f){
-                System.err.println("Message Failed");
-                System.err.println(f.getMessage());
+
+        int chunkSize = 800;
+        int currentPosition = 0;
+
+        while (currentPosition < messageText.length()) {
+            int nextPosition = Math.min(currentPosition + chunkSize, messageText.length());
+
+            if (nextPosition < messageText.length()) {
+                int lastNewLine = messageText.lastIndexOf('\n', nextPosition);
+
+                if (lastNewLine > currentPosition){
+                    nextPosition = lastNewLine +1;
+                }
             }
+            String chunk = messageText.substring(currentPosition, nextPosition).trim();
+            if(!chunk.isEmpty()){
+                sendSingleChunk(chunk, chatId);
+
+                if (nextPosition < messageText.length()) {
+                    waitForMessage();
+                }
+            }
+            currentPosition = nextPosition;
         }
     }
+
+
     public void sendChatAction(long chatId){
         String stringChatId = String.valueOf(chatId);
         SendChatAction chatAction = new SendChatAction(stringChatId,"typing");
@@ -62,6 +68,34 @@ public class TelegramBot implements LongPollingSingleThreadUpdateConsumer {
             System.out.println("Get Me Failed");
             System.err.println(e.getMessage());
             return  null;
+        }
+    }
+
+    private static void waitForMessage(){
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            System.err.println("Thread interrupted!");
+        }
+    }
+
+    private static void sendSingleChunk(String chunk, long chatId) {
+        SendMessage message = SendMessage.builder()
+                .chatId(chatId)
+                .text(chunk)
+                .parseMode("Markdown")
+                .build();
+
+        try {
+            telegramClient.execute(message);
+        } catch (TelegramApiException e) {
+            try {
+                message.setParseMode(null);
+                telegramClient.execute(message);
+            } catch (TelegramApiException f) {
+                System.err.println("Zoiks! Even plain text failed: " + f.getMessage());
+            }
         }
     }
 }
